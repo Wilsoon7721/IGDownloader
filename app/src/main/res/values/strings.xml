@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">IGDownloader</string>
+    <string name="link_hint">https://www.instagram.com/p/…</string>
+    <string name="textbox_hint">Post Link</string>
+    <string name="download_button">Download</string>
+
 </resources>

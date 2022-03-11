@@ -3,21 +3,18 @@
 	<head></head>
 	<body>
 		<script>
-		function GetURLParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}​
-		var code = GetURLParameter(code);
-		document.write("Retrieved Code: " + code);
+			function GetURLParameter(sParam) {
+				var sPageURL = window.location.search.substring(1);
+				var sURLVariables = sPageURL.split('&');
+				for (var i = 0; i < sURLVariables.length; i++) {
+					var sParameterName = sURLVariables[i].split('=');
+					if (sParameterName[0] == sParam) {
+						return sParameterName[1];
+					}
+				}
+			}​
+			var code = GetURLParameter("code");
+			document.write("Retrieved Code: " + code);
 		</script>
 	</body>
 </html>

@@ -2,25 +2,31 @@
 <html>
 	<head>
 	<style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        .imgbox {
-            display: grid;
-            height: 100%;
-        }
-        .center-fit {
-            max-width: 100%;
-            max-height: 100vh;
-            margin: auto;
-        }
-    </style>
+	.authorizedbox {
+		margin: auto;
+		background-color: #636965;
+		padding: 10px;
+		background: #636965;
+		border: 5px solid #636965;
+	}
+	
+	.checkmark {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	}
 	<title>Authorized!</title>
 	</head>
 	
 	<body>
-		<div class="imgbox">
-			<img class="center-fit" src="authorized-page.png">
+		<script>
+		window.addEventListener('load', function() {
+			console.log("Website loaded!");
+			document.body.style.backgroundColor = "lightblue";
+		});
+		</script>
+		<div class="authorizedbox">
+			<img class="checkmark" src="green-mark.png">
 		</div>
 	</body>

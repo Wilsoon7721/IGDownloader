@@ -3,6 +3,11 @@ package com.gmail.calorious.igdownloader;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +19,24 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private final int STORAGE_REQUEST_CODE = 320550;
+    private Button paste_link_button, download_button;
+    private EditText link_textbox;
+    private WebView authorization_window;
+    // INSTAGRAM AUTHORIZATION TOKEN SHOULD ATTEMPT TO BE SAVED INTO THE DEVICE'S INTERNAL STORAGE AS APP-SPECIFIC DATA
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        View main_activity_view = findViewById(R.id.main_layout);
         requestPermissions("STORAGE");
+        // Initialize components
+        paste_link_button = findViewById(R.id.paste_link_button);
+        download_button = findViewById(R.id.download_button);
+        link_textbox = findViewById(R.id.instagram_link_input);
 
+
+        PopupWindow popup = new PopupWindow();
     }
 
 
@@ -44,5 +61,12 @@ public class MainActivity extends AppCompatActivity {
             }
             Toast.makeText(this, "Error: Could not obtain STORAGE permission.", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+
+    // Button actions
+    public void pasteClipboardData() {
+
     }
 }

@@ -35,10 +35,10 @@
         android:layout_marginBottom="518dp"
         android:ems="10"
         android:hint="@string/link_hint"
+        android:importantForAutofill="no"
         android:inputType="textLongMessage|text"
         android:isScrollContainer="true"
-        android:text="@string/textbox_hint"
-        android:importantForAutofill="no" />
+        android:text="@string/textbox_hint" />
 
     <Button
         android:id="@+id/download_button"
@@ -52,7 +52,7 @@
         android:text="@string/download_button" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/paste_link_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -62,4 +62,14 @@
         android:backgroundTint="@color/background_bg_color"
         android:text="@string/paste_link_button"
         tools:ignore="RelativeOverlap" />
+
+    <WebView
+        android:id="@+id/authorization_window"
+        android:layout_width="307dp"
+        android:layout_height="531dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="57dp"
+        android:layout_marginBottom="96dp"
+        android:visibility="gone" />
 </RelativeLayout>

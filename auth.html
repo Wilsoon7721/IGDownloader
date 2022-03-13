@@ -3,15 +3,18 @@
 	<head></head>
 	<body>
 		<script>
-				var sPageURL = window.location.search.substring(1);
-				var sURLVariables = sPageURL.split('&');
-				for (var i = 0; i < sURLVariables.length; i++) {
-					var sParameterName = sURLVariables[i].split('=');
-					if (sParameterName[0] == "code") {
-						var code = sParameterName[1];
-						document.write("Retrieved Code: " + code);
-					}
-				}
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) {
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == "code") {			
+				var code = sParameterName[1];
+				// save code
+			}
+		}
+		await new Promise(resolve => setTimeout(resolve, 2000));
+		window.location.replace("https://wilsoon7721.github.io/IGDownloader/authorized");
 		</script>
+		<p style="font-family: Arial, Helvetica, sans-serif; font-size:13px">Redirecting... Please wait...</p>
 	</body>
 </html>

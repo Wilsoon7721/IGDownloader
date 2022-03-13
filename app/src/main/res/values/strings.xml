@@ -3,5 +3,5 @@
     <string name="link_hint">https://www.instagram.com/p/…</string>
     <string name="textbox_hint">Post Link</string>
     <string name="download_button">Download</string>
-
+    <string name="paste_link_button">Paste Link</string>
 </resources>

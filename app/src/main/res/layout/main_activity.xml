@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -36,7 +37,8 @@
         android:hint="@string/link_hint"
         android:inputType="textLongMessage|text"
         android:isScrollContainer="true"
-        android:text="@string/textbox_hint" />
+        android:text="@string/textbox_hint"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/download_button"
@@ -46,5 +48,18 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="136dp"
         android:layout_marginBottom="454dp"
+        android:backgroundTint="@color/background_bg_color"
         android:text="@string/download_button" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="144dp"
+        android:layout_marginBottom="569dp"
+        android:backgroundTint="@color/background_bg_color"
+        android:text="@string/paste_link_button"
+        tools:ignore="RelativeOverlap" />
 </RelativeLayout>

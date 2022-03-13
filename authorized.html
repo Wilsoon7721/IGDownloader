@@ -11,12 +11,15 @@
 				background: transparent;
 				left: 50%;
 				margin-left: -60px;
+				display: block;
+				margin: 0 auto;
 			}
 			
 			.base-text {
 				color: black
 				font-family: Arial, Helvetica, sans-serif;
 				text-align: justify;
+				width: 120px;
 			}
 		</style>
 		<title>Authorized!</title>
@@ -29,8 +32,10 @@
 			document.body.style.backgroundColor = "lightblue";
 		});
 		</script>
-		<img class="checkmark" src="green-mark.png">
-		<h3 class="base-text">Authorized!</h3>
-		<p class="base-text">You may now close this window.</p>
+		<div>
+			<img class="checkmark" src="green-mark.png">
+			<h3 class="base-text">Authorized!</h3>
+			<p class="base-text">You may now close this window.</p>
+		</div>
 	</body>
 </html>

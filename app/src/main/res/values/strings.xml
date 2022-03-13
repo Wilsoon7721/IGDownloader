@@ -4,4 +4,5 @@
     <string name="textbox_hint">Post Link</string>
     <string name="download_button">Download</string>
     <string name="paste_link_button">Paste Link</string>
+    <string name="authorize">Authorize...</string>
 </resources>

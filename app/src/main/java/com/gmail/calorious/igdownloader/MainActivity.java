@@ -1,8 +1,11 @@
 package com.gmail.calorious.igdownloader;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText link_textbox;
     private WebView authorization_window;
     // INSTAGRAM AUTHORIZATION TOKEN SHOULD ATTEMPT TO BE SAVED INTO THE DEVICE'S INTERNAL STORAGE AS APP-SPECIFIC DATA
-
+    // Technically, you don't need Instagram API to access posts from public accounts as you can use the flag '?__a=1' to view raw json data behind the post.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
         paste_link_button = findViewById(R.id.paste_link_button);
         download_button = findViewById(R.id.download_button);
         link_textbox = findViewById(R.id.instagram_link_input);
-
-
-        PopupWindow popup = new PopupWindow();
+        authorization_window = findViewById(R.id.authorization_window);
+        PopupWindow popup = new PopupWindow(authorization_window);
+        popup.showAtLocation(main_activity_view, Gravity.CENTER, 0, 0);
+        popup.setElevation(30);
     }
 
 
@@ -66,7 +70,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Button actions
-    public void pasteClipboardData() {
-
+    public void pasteClipboardData(View v) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData data = clipboardManager.getPrimaryClip();
+        ClipData.Item item = data.getItemAt(0);
+        CharSequence text = item.getText();
+        link_textbox.setText(text);
     }
+
+    public void download(View v) {
+        // TODO Download method
+    }
+
+    public void authorize(View v) {
+        // TODO Authorize method (with WebView), if token is still valid then disable this button and set WebView visibility to gone.
+    }
+
 }

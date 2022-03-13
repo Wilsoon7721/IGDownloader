@@ -25,14 +25,14 @@
 
     <EditText
         android:id="@+id/instagram_link_input"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="51dp"
-        android:layout_marginBottom="518dp"
+        android:layout_marginBottom="490dp"
         android:ems="10"
         android:hint="@string/link_hint"
         android:importantForAutofill="no"
@@ -46,10 +46,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="454dp"
+        android:layout_marginEnd="139dp"
+        android:layout_marginBottom="422dp"
         android:backgroundTint="@color/background_bg_color"
-        android:text="@string/download_button" />
+        android:onClick="download"
+        android:text="@string/download_button"
+        android:textColor="#6D4C41" />
 
     <Button
         android:id="@+id/paste_link_button"
@@ -60,7 +62,9 @@
         android:layout_marginEnd="144dp"
         android:layout_marginBottom="569dp"
         android:backgroundTint="@color/background_bg_color"
+        android:onClick="pasteClipboardData"
         android:text="@string/paste_link_button"
+        android:textColor="#6D4C41"
         tools:ignore="RelativeOverlap" />
 
     <WebView
@@ -72,4 +76,16 @@
         android:layout_marginEnd="57dp"
         android:layout_marginBottom="96dp"
         android:visibility="gone" />
+
+    <Button
+        android:id="@+id/authorize_button"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="130dp"
+        android:layout_marginBottom="150dp"
+        android:backgroundTint="@color/background_bg_color"
+        android:text="@string/authorize"
+        android:textColor="#6D4C41" />
 </RelativeLayout>

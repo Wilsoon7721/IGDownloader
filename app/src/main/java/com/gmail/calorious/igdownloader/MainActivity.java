@@ -139,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
             return -3;
         }
         if(jsonObj.length() == 0) {
-            // No data
+            // No data - JSON string is {}
+            Log.d("JSON Parser", "JSON String: " + jsonObj);
         }
     }
 }

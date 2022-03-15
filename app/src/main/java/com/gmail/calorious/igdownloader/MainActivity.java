@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
@@ -134,12 +135,11 @@ public class MainActivity extends AppCompatActivity {
             jsonObj = new JSONObject(response1Content.toString());
         } catch (JSONException e) {
             e.printStackTrace();
-            System.err.println("Failed to parse: " + response1Content.toString() + "into a JSONObject.");
+            Log.e("JSON Parser", "Failed to parse: " + response1Content + "into a JSONObject.");
             return -3;
         }
         if(jsonObj.length() == 0) {
             // No data
         }
-        return;
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <style name="edit_text_highlight" parent="android:Widget.EditText">
+        <item name="android:colorControlActivated">@color/red</item>
+        <item name="android:colorControlNormal">@color/red</item>
+        <item name="android:colorControlHighlight">@color/red</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+</resources>

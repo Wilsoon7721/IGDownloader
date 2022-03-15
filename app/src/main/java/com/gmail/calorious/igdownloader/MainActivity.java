@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +27,13 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -37,12 +42,16 @@ public class MainActivity extends AppCompatActivity {
     private EditText link_textbox;
     private Button paste_link_button, download_button;
     private WebView authorization_window;
+    private TextView error_message;
+    private ScheduledExecutorService executor;
 
     // INSTAGRAM AUTHORIZATION TOKEN SHOULD ATTEMPT TO BE SAVED INTO THE DEVICE'S INTERNAL STORAGE AS APP-SPECIFIC DATA
     // Technically, you don't need Instagram API to access posts from public accounts as you can use the flag '?__a=1' to view raw json data behind the post.
+    // Hmm, seems like you may need the Instagram API to view private posts as authorization is required, unless.. you are able to include authorization in the request to the link with ?__a=1.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        executor = Executors.newSingleThreadScheduledExecutor();
         setContentView(R.layout.main_activity);
         View main_activity_view = findViewById(R.id.main_layout);
         requestPermissions("STORAGE");
@@ -51,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         download_button = findViewById(R.id.download_button);
         link_textbox = findViewById(R.id.instagram_link_input);
         authorization_window = findViewById(R.id.authorization_window);
-
+        error_message = findViewById(R.id.error_message);
 
         PopupWindow popup = new PopupWindow(authorization_window);
         popup.showAtLocation(main_activity_view, Gravity.CENTER, 0, 0);
@@ -88,10 +97,32 @@ public class MainActivity extends AppCompatActivity {
         ClipData.Item item = data.getItemAt(0);
         CharSequence text = item.getText();
         link_textbox.setText(text);
+        paste_link_button.setText(R.string.paste_data_temp_msg);
+        paste_link_button.setEnabled(false);
+        executor.schedule(() -> {
+           paste_link_button.setText(R.string.paste_link_button);
+           paste_link_button.setEnabled(true);
+        }, 2, TimeUnit.SECONDS);
     }
 
     public void download(View v) {
         // TODO Download method
+        String text = link_textbox.getText().toString();
+        download_button.setText(R.string.download_button_pending);
+        if(isInstagramLink(text)) {
+            // Continue download
+            try {
+                if(verifyLink(text) == 401) {
+                    highlightError("You need to login to Instagram to be able to download this content. [INACCESSIBLE_ACCOUNT_PRIVATE]");
+                    download_button.setText(R.string.download_button);
+                    return;
+                }
+            } catch (IOException e) {
+               Log.e("Instagram Link Handler", "Unable to verify link as the method ran into an exception.");
+               e.printStackTrace();
+            }
+        }
+        highlightError("This does not seem like a valid Instagram link. [INACCESSIBLE_MALFORMED_URL]");
     }
 
     public void authorize(View v) {
@@ -107,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
      * 401 - Unauthorized (Requires authorization token)
      * -2 - Severe Error (Instagram may be down)
      * -3 - JSON Parse Error
+     * -185 - Other HTTP Error (lazy to handle)
      */
     private int verifyLink(String link) throws IOException {
         StringBuilder stringBuilder = new StringBuilder(link);
@@ -141,6 +173,54 @@ public class MainActivity extends AppCompatActivity {
         if(jsonObj.length() == 0) {
             // No data - JSON string is {}
             Log.d("JSON Parser", "JSON String: " + jsonObj);
+            URL url2 = new URL(link); // Try the base link next and see if it returns 404 or if its a redirection link (302) [REDIRECTION MEANS UNAUTHORIZED]
+            HttpsURLConnection connection2 = (HttpsURLConnection) url2.openConnection();
+            connection2.setInstanceFollowRedirects(false);
+            // TODO ADD AUTHORIZATION TOKENS IF APPLICABLE
+            connection2.connect();
+            if(connection2.getResponseCode() == 302) {
+                // Unauthorized
+                return 401;
+            }
+            if(connection2.getResponseCode() == 404) {
+                return 404;
+            }
+            if(connection2.getResponseCode() == 200) {
+                Log.e("Instagram Link Handler", "" + link + " returned a status code 200 but it had no JSON data.");
+                return 0; // So its a public post but theres no JSON data??
+            }
+            return -185;
+        }
+        // Return no error since the JSON data is present.
+        return 0;
+    }
+
+    private boolean isInstagramLink(String link) {
+        if(link.startsWith("https://www.instagram.com")) return true;
+        if(link.startsWith("https://instagram.com")) return true;
+        if(link.startsWith("instagram.com")) return true;
+        return false;
+    }
+    private void highlightError(String errorMessage) {
+        error_message.setText(errorMessage);
+        link_textbox.setTextColor(Color.RED);
+        link_textbox.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.edit_text_highlight));
+        link_textbox.setOnClickListener((view) -> {
+            link_textbox.setTextColor(Color.BLACK);
+            error_message.setText(" ");
+            error_message.setVisibility(View.INVISIBLE);
+            link_textbox.setBackgroundTintList(ContextCompat.getColorStateList(MainActivity.this, R.color.edit_text_non_highlight));
+        });
+    }
+
+    private List<String> obtainAllContentURLs(String instagramLink, String authorizationToken) {
+
+        try {
+            URL url = new URL(instagramLink);
+        } catch(IOException ex) {
+            Log.e("Content Handler", "Unable to retrieve content URLs for instagram link: " + instagramLink);
+            ex.printStackTrace();
+            return null;
         }
     }
 }

@@ -112,8 +112,14 @@ public class MainActivity extends AppCompatActivity {
         if(isInstagramLink(text)) {
             // Continue download
             try {
-                if(verifyLink(text) == 401) {
+                int result = verifyLink(text);
+                if(result == 401) {
                     highlightError("You need to login to Instagram to be able to download this content. [INACCESSIBLE_ACCOUNT_PRIVATE]");
+                    download_button.setText(R.string.download_button);
+                    return;
+                }
+                if(result == 404) {
+                    highlightError("Instagram was unable to find this content. [INACCESSIBLE_NOT_FOUND]");
                     download_button.setText(R.string.download_button);
                     return;
                 }
@@ -121,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                Log.e("Instagram Link Handler", "Unable to verify link as the method ran into an exception.");
                e.printStackTrace();
             }
+
+            return;
         }
         highlightError("This does not seem like a valid Instagram link. [INACCESSIBLE_MALFORMED_URL]");
     }
@@ -222,5 +230,6 @@ public class MainActivity extends AppCompatActivity {
             ex.printStackTrace();
             return null;
         }
+      return null;
     }
 }

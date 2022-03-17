@@ -26,10 +26,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -221,15 +222,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private List<String> obtainAllContentURLs(String instagramLink, String authorizationToken) {
-
+    // This method will not check instagram link for its validity apart from whether it requires an authorization token.
+    private List<String> obtainAllContentURLs(String instagramLink, String authorizationToken) throws IOException, JSONException {
+        if (verifyLink(instagramLink) == 401) {
+            // Use authorization token
+        }
+        if ("".equals(authorizationToken) || authorizationToken.isEmpty())
+            Log.e("Instagram API Handler", "Ignoring the presence of Authorization Token: verifyLink() did not return ERR_UNAUTHORIZED.");
+        StringBuilder builder = new StringBuilder(instagramLink);
+        if (instagramLink.endsWith("/")) {
+            builder.append("?__a=1");
+        } else {
+            builder.append("/?__a=1");
+        }
+        InputStream inputStream = new URL(builder.toString()).openStream();
+        final String[] jsonString = new String[1];
+        executor.execute(() -> {
+            jsonString[0] = obtainJSONString(inputStream);
+        });
         try {
-            URL url = new URL(instagramLink);
-        } catch(IOException ex) {
-            Log.e("Content Handler", "Unable to retrieve content URLs for instagram link: " + instagramLink);
+            Thread.sleep(1000);
+        } catch(InterruptedException ignored) {}
+        JSONObject jsonOject = new JSONObject(jsonString[0]);
+
+    }
+
+    private String obtainJSONString(InputStream inputStream) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        StringBuilder jsonURL_builder = new StringBuilder();
+        int cp = 0;
+        try {
+            while ((cp = reader.read()) != -1) {
+                jsonURL_builder.append((char) cp);
+            }
+        } catch (IOException ex) {
             ex.printStackTrace();
+            Log.e("Instagram API Handler", "Unable to read contents of JSON.");
             return null;
         }
-      return null;
+        return jsonURL_builder.toString();
     }
 }

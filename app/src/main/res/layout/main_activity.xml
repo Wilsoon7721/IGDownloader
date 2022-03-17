@@ -83,8 +83,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="130dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginBottom="142dp"
         android:backgroundTint="@color/background_bg_color"
         android:text="@string/authorize"
         android:textColor="#6D4C41" />
@@ -98,4 +98,5 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="463dp"
         android:textColor="#FF0000" />
+
 </RelativeLayout>

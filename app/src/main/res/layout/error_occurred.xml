@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/main_layout" />
+
+    <WebView
+        android:id="@+id/authorization_window"
+        android:layout_width="307dp"
+        android:layout_height="531dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="57dp"
+        android:layout_marginBottom="96dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="153dp"
+        android:layout_marginBottom="511dp"
+        app:srcCompat="@mipmap/red_X_foreground" />
+
+    <TextView
+        android:id="@+id/error_occurred"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="478dp"
+        android:gravity="center_horizontal"
+        android:text="@string/hardcoded_error_occurred"
+        android:textColor="#FF0000"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/error_occurred_screen_message"
+        android:layout_width="321dp"
+        android:layout_height="121dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="359dp"
+        android:textColor="#FF0000"
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/error_action_button"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="137dp"
+        android:layout_marginEnd="137dp"
+        android:layout_marginBottom="238dp"
+        android:backgroundTint="@color/local_android_holo_blue_bright" />
+
+</RelativeLayout>

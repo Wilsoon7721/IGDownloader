@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/IGDownloader/app/src/main/res/layout/authorization_view.xml" value="0.1875" />
+        <entry key="..\:/AndroidStudioProjects/IGDownloader/app/src/main/res/layout/error_occurred.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/IGDownloader/app/src/main/res/layout/main_activity.xml" value="0.24954710144927536" />
       </map>
     </option>

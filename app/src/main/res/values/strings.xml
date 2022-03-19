@@ -7,4 +7,7 @@
     <string name="authorize">Authorize…</string>
     <string name="paste_data_temp_msg">Pasted!</string>
     <string name="download_button_pending">Please wait…</string>
+    <string name="hardcoded_error_occurred">An error occurred!</string>
+    <string name="severe_error_charmap_creation">The application was unable to create an internal file.\n Please try to relaunch the application.\n File: internal_charmap.json</string>
+    <string name="action_button_text_close_application">Close Application</string>
 </resources>

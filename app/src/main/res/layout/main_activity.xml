@@ -1,27 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/bottom_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        android:background="@android:color/holo_blue_bright"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/top_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_bright"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+    <include layout="@layout/main_layout" />
 
     <EditText
         android:id="@+id/instagram_link_input"
@@ -66,16 +49,6 @@
         android:text="@string/paste_link_button"
         android:textColor="#6D4C41"
         tools:ignore="RelativeOverlap" />
-
-    <WebView
-        android:id="@+id/authorization_window"
-        android:layout_width="307dp"
-        android:layout_height="531dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="96dp"
-        android:visibility="gone" />
 
     <Button
         android:id="@+id/authorize_button"

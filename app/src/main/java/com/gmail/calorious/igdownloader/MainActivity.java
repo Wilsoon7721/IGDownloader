@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,9 +42,10 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends AppCompatActivity {
     private final int STORAGE_REQUEST_CODE = 320550;
     private EditText link_textbox;
-    private Button paste_link_button, download_button;
+    private Button paste_link_button, download_button, severe_error_action_button;
     private WebView authorization_window;
     private TextView error_message;
+    private TextView severe_error_message;
     private ScheduledExecutorService executor;
 
     // INSTAGRAM AUTHORIZATION TOKEN SHOULD ATTEMPT TO BE SAVED INTO THE DEVICE'S INTERNAL STORAGE AS APP-SPECIFIC DATA
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         executor = Executors.newSingleThreadScheduledExecutor();
         setContentView(R.layout.main_activity);
-        View main_activity_view = findViewById(R.id.main_layout);
+        View main_activity_view = findViewById(R.id.main_layout); // Refers to the RelativeLayout object
         requestPermissions("STORAGE");
         // Initialize components
         paste_link_button = findViewById(R.id.paste_link_button);
@@ -62,7 +64,26 @@ public class MainActivity extends AppCompatActivity {
         link_textbox = findViewById(R.id.instagram_link_input);
         authorization_window = findViewById(R.id.authorization_window);
         error_message = findViewById(R.id.error_message);
-
+        severe_error_message = findViewById(R.id.error_occurred_screen_message);
+        severe_error_action_button = findViewById(R.id.error_action_button);
+        File charMapFile = new File(getFilesDir(), "internal_charmap.json");
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (!(charMapFile.exists())) {
+                try {
+                    // Note that this requires the storage permission first.
+                    charMapFile.createNewFile();
+                } catch (IOException ex) {
+                    Log.e("MainActivity", "Unable to create the charmap file.");
+                    setContentView(R.layout.error_occurred);
+                    severe_error_message.setText(R.string.severe_error_charmap_creation);
+                    severe_error_action_button.setText(R.string.action_button_text_close_application);
+                    severe_error_action_button.setOnClickListener((view) -> {
+                        finish();
+                        System.exit(0);
+                    });
+                }
+            }
+        }
         PopupWindow popup = new PopupWindow(authorization_window);
         popup.showAtLocation(main_activity_view, Gravity.CENTER, 0, 0);
         popup.setElevation(30);
@@ -187,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             connection2.setInstanceFollowRedirects(false);
             // TODO ADD AUTHORIZATION TOKENS IF APPLICABLE
             connection2.connect();
+            // 302 refers to a temporary redirect, which is triggered by its Unauthorized state. The redirection will cause the User to redirect to the account page.
             if(connection2.getResponseCode() == 302) {
                 // Unauthorized
                 return 401;
@@ -226,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> obtainAllContentURLs(String instagramLink, String authorizationToken) throws IOException, JSONException {
         if (verifyLink(instagramLink) == 401) {
             // Use authorization token
+            // Obtain media_id from converting the Base64 to Base10
         }
         if ("".equals(authorizationToken) || authorizationToken.isEmpty())
             Log.e("Instagram API Handler", "Ignoring the presence of Authorization Token: verifyLink() did not return ERR_UNAUTHORIZED.");
@@ -237,9 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
         InputStream inputStream = new URL(builder.toString()).openStream();
         final String[] jsonString = new String[1];
-        executor.execute(() -> {
-            jsonString[0] = obtainJSONString(inputStream);
-        });
+        executor.execute(() -> jsonString[0] = obtainJSONString(inputStream));
         try {
             Thread.sleep(1000);
         } catch(InterruptedException ignored) {}
@@ -250,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     private String obtainJSONString(InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         StringBuilder jsonURL_builder = new StringBuilder();
-        int cp = 0;
+        int cp;
         try {
             while ((cp = reader.read()) != -1) {
                 jsonURL_builder.append((char) cp);
@@ -261,5 +282,9 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         return jsonURL_builder.toString();
+    }
+
+    private String convertIntegerBase(String str, int frmBase, int toBase) {
+        return Integer.toString(Integer.parseInt(str, frmBase), toBase);
     }
 }

@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -247,11 +248,13 @@ public class MainActivity extends AppCompatActivity {
     // This method will not check instagram link for its validity apart from whether it requires an authorization token.
     private List<String> obtainAllContentURLs(String instagramLink, String authorizationToken) throws IOException, JSONException {
         if (verifyLink(instagramLink) == 401) {
+            // PRIVATE POST
             // Use authorization token
             // Obtain media_id from converting the Base64 to Base10
         }
         if ("".equals(authorizationToken) || authorizationToken.isEmpty())
             Log.e("Instagram API Handler", "Ignoring the presence of Authorization Token: verifyLink() did not return ERR_UNAUTHORIZED.");
+        // PUBLIC POST
         StringBuilder builder = new StringBuilder(instagramLink);
         if (instagramLink.endsWith("/")) {
             builder.append("?__a=1");
@@ -264,8 +267,18 @@ public class MainActivity extends AppCompatActivity {
         try {
             Thread.sleep(1000);
         } catch(InterruptedException ignored) {}
-        JSONObject jsonOject = new JSONObject(jsonString[0]);
-
+        JSONObject jsonObject = new JSONObject(jsonString[0]);
+        // Determine the presence of a parent JSONArray key 'carousel_media' which indicates whether the post has multiple media objects.
+        JSONArray carousel_media;
+        try {
+            carousel_media = jsonObject.getJSONArray("carousel_media");
+        } catch(JSONException ex) {
+            Log.d("Instagram Content Handler", "Could not find 'carousel_media' key in Instagram dump... Retrieving a single instagram photo!");
+            // Single media
+            // Obtain original_width and original_height from the parent node (jsonObject)
+            // Obtain image_versions2 as a JSONObject, then retrieve the candidates key as a JSONArray
+            // Match the width and height of each object in the array and find the ORIGINAL height and width, together with its corresponding url.
+        }
     }
 
     private String obtainJSONString(InputStream inputStream) {

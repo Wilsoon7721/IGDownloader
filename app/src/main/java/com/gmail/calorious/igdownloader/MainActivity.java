@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -273,12 +274,32 @@ public class MainActivity extends AppCompatActivity {
         try {
             carousel_media = jsonObject.getJSONArray("carousel_media");
         } catch(JSONException ex) {
-            Log.d("Instagram Content Handler", "Could not find 'carousel_media' key in Instagram dump... Retrieving a single instagram photo!");
+            Log.d("Instagram Content Handler", "Could not find 'carousel_media' key in Instagram dump... Retrieving a single instagram photo.");
             // Single media
             // Obtain original_width and original_height from the parent node (jsonObject)
+            int original_width = jsonObject.getInt("original_width");
+            int original_height = jsonObject.getInt("original_height");
             // Obtain image_versions2 as a JSONObject, then retrieve the candidates key as a JSONArray
+            JSONArray candidates = jsonObject.getJSONObject("image_versions2").getJSONArray("candidates");
             // Match the width and height of each object in the array and find the ORIGINAL height and width, together with its corresponding url.
+            // Refer to https://stackoverflow.com/questions/1568762/accessing-members-of-items-in-a-jsonarray-with-java
+            for(int i = 0; i < candidates.length(); ++i) { // TODO If it doesnt work, suggest changing ++i to i++
+                JSONObject record = candidates.getJSONObject(i);
+                int width = record.getInt("width");
+                int height = record.getInt("height");
+                Log.d("Instagram Content Handler", "Found candidate with width: " + width + ", height: " + height + ", and url: " + record.getString("url") + ".");
+                if(width == original_width || height == original_height) { // One matching resolution SHOULD be enough.
+                    Log.d("Instagram Content Handler", "Successfully found a width or height that matches the original.");
+                    String url = record.getString("url");
+                    return Collections.singletonList(url);
+                }
+            }
+
+            return null;
         }
+        // Multiple media
+
+
     }
 
     private String obtainJSONString(InputStream inputStream) {

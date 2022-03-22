@@ -294,12 +294,13 @@ public class MainActivity extends AppCompatActivity {
                     return Collections.singletonList(url);
                 }
             }
-
+            Log.e("Instagram Content Handler", "End of candidates key and a matching URL with an original width or height was not found.");
+            Log.e("CONTENT DUMP", candidates.toString());
             return null;
         }
         // Multiple media
 
-
+        return;
     }
 
     private String obtainJSONString(InputStream inputStream) {

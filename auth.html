@@ -18,7 +18,8 @@
 				}
 			}
 			sleep(2000);
-			window.location.replace("https://wilsoon7721.github.io/IGDownloader/authorized");
+			var b64data = window.btoa(unescape(code));
+			window.location.replace("https://wilsoon7721.github.io/IGDownloader/authorized?other_data=" + b64data);
 		}
 		
 		redirect();

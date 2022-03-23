@@ -25,11 +25,34 @@
 				text-align: center;
 				margin-bottom: 120px;
 			}
+			
+			.footer {
+				position: fixed;     
+				text-align: left;    
+			    bottom: 10px; 
+			    width: 100%;
+			}
 		</style>
 		<title>Authorized!</title>
 	</head>
 	
 	<body>
+		<script>
+		var sPageURL = window.location.search.substring(1);
+			var sURLVariables = sPageURL.split('&');
+			for (var i = 0; i < sURLVariables.length; i++) {
+				var sParameterName = sURLVariables[i].split('=');
+				if (sParameterName[0] == "other_data") {			
+					var b64code = sParameterName[1];
+					// put b64code at the bottom of the page
+					var footer = document.getElementsByClassName("footer")
+					for(var p = 0; p < footer.length; p++) {
+					    footer[p].innerHTML = "Code: " + b64code;
+					}
+					break;
+				}
+			}
+		</script>
 		<script>
 		window.addEventListener('load', function() {
 			console.log("Website loaded!");
@@ -41,5 +64,6 @@
 			<h3 class="base-text">Authorized!</h3>
 			<p class="base-text">You may now close this window.</p>
 		</div>
+		<p class="footer"></p>
 	</body>
 </html>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         executor = Executors.newSingleThreadScheduledExecutor();
         setContentView(R.layout.main_activity);
         View main_activity_view = findViewById(R.id.main_layout); // Refers to the RelativeLayout object

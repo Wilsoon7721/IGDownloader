@@ -36,6 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         executor = Executors.newSingleThreadScheduledExecutor();
         setContentView(R.layout.main_activity);
+        if(getSupportActionBar() != null) getSupportActionBar().hide();
         View main_activity_view = findViewById(R.id.main_layout); // Refers to the RelativeLayout object
         requestPermissions("STORAGE");
         // Initialize components
@@ -233,8 +235,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isInstagramLink(String link) {
         if(link.startsWith("https://www.instagram.com")) return true;
         if(link.startsWith("https://instagram.com")) return true;
-        if(link.startsWith("instagram.com")) return true;
-        return false;
+        return link.startsWith("instagram.com");
     }
     private void highlightError(String errorMessage) {
         error_message.setText(errorMessage);

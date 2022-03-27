@@ -33,10 +33,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             JSONArray candidates = jsonObject.getJSONObject("image_versions2").getJSONArray("candidates");
             // Match the width and height of each object in the array and find the ORIGINAL height and width, together with its corresponding url.
             // Refer to https://stackoverflow.com/questions/1568762/accessing-members-of-items-in-a-jsonarray-with-java
-            for(int i = 0; i < candidates.length(); ++i) { // TODO If it doesnt work, suggest changing ++i to i++
+            for(int i = 0; i < candidates.length(); i++) { // TODO If it doesnt work, suggest changing i++ to ++i
                 JSONObject record = candidates.getJSONObject(i);
                 int width = record.getInt("width");
                 int height = record.getInt("height");
@@ -302,8 +302,30 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         // Multiple media
-
-        return;
+        int size = carousel_media.length();
+        Log.d("Instagram Content Handler", "A total of " + size + " media was found for this link.");
+        List<String> urls = new ArrayList<String>();
+        for(int c = 0; c < size; c++) { // TODO If it doesnt work, suggest changing c++ to ++c
+            JSONObject media_record = carousel_media.getJSONObject(c);
+            JSONArray media_candidates = media_record.getJSONObject("image_versions2").getJSONArray("candidates");
+            int original_width = media_record.getInt("original_width");
+            int original_height = media_record.getInt("original_height");
+            for(int i = 0; i < media_candidates.length(); i++) { // TODO NESTED FOR LOOP: If it doesn't work, suggest changing i++ to ++i
+                JSONObject internal_candidate = media_candidates.getJSONObject(i);
+                int width = internal_candidate.getInt("width");
+                int height = internal_candidate.getInt("height");
+                if(width == original_width || height == original_height) {
+                    Log.d("Instagram Content Handler", "Successfully found a width or height that matches the original.");
+                    String url = internal_candidate.getString("url");
+                    urls.add(url);
+                }
+            }
+        }
+        if(urls.size() == 0) {
+            Log.e("MainActivity", "No URLs were added to the list during the Content Handler operation.");
+            return null;
+        }
+        return urls;
     }
 
     private String obtainJSONString(InputStream inputStream) {

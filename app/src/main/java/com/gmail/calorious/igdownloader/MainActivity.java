@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     writer.write(jsonObject.toString());
                     writer.close();
                     Log.d("MainActivity", "Successfully created charmap file.");
+                    Log.d("MainActivity", "Charmap file is present in: " + charMapFile.getCanonicalPath());
                 } catch(JSONException | IOException ex) {
                     Log.e("MainActivity", "Unable to create the charmap file.");
                     ex.printStackTrace();
